@@ -1,0 +1,14 @@
+Package: penRegSum
+Title: What the Package Does (one line, title case)
+Version: 0.0.0.9000
+Authors@R: person("Jack", "Pattee", email = "patte631@umn.edu", role = c("aut", "cre"))
+Description: Performs penalized regression on SNP data given a vector of correlations and a reference panel
+Depends: R (>= 3.3.1)
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+LinkingTo: Rcpp, RcppArmadillo
+Imports:
+   Rcpp,
+   Matrix
+RoxygenNote: 6.0.1.9000
