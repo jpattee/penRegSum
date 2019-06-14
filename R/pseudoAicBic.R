@@ -33,8 +33,15 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   }
   
   n = nrow(genoMat)
-
-  covMat = cov(genoMat)
+  
+  matList = vector("list", length(unique(bim$V1)))
+  matListInd = 1
+  for(i in unique(bim$V1)){
+    tempInd = which(bim$V1 == i)
+    matList[[matListInd]] = cov(genoMat[,tempInd])
+    matListInd = matListInd+1
+  }
+  covMat = bdiag(matList)
 
   sds=normalize(genoMat)
   sds = sds[,1]
