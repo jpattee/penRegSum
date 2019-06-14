@@ -14,7 +14,7 @@
 #' @return RcppArmadillo genotype matrix
 #' 
 genotypeMatrix <- function(fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset, fillmissing) {
-    .Call(`_penRegSum_genotypeMatrix`, fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset, fillmissing)
+    .Call('_penRegSum_genotypeMatrix', PACKAGE = 'penRegSum', fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset, fillmissing)
 }
 
 #'normalize genotype matrix
@@ -23,6 +23,6 @@ genotypeMatrix <- function(fileName, N, P, col_skip_pos, col_skip, keepbytes, ke
 #'@return vector of standard deviations
 #'
 normalize2 <- function(genotypes) {
-    .Call(`_penRegSum_normalize2`, genotypes)
+    .Call('_penRegSum_normalize2', PACKAGE = 'penRegSum', genotypes)
 }
 
