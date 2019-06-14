@@ -31,10 +31,10 @@ quasicors <- function(testBetas, penalizedBetas, refPanel, allele1 = NULL, allel
 
   genoMat=genotypeMatrix(paste0(refPanel,".bed"),N=nFam,P=p,integer(0),integer(0),integer(0),integer(0),1)
 
-  matList = vector("list", length(unique(bim$chr)))
+  matList = vector("list", length(unique(bim$V1)))
   matListInd = 1
-  for(i in unique(bim$chr)){
-    tempInd = which(bim$chr == i)
+  for(i in unique(bim$V1)){
+    tempInd = which(bim$V1 == i)
     matList[[matListInd]] = cov(genoMat[,tempInd])
     matListInd = matListInd+1
   }
