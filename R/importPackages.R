@@ -1,4 +1,4 @@
 #' @useDynLib penRegSum
-#' @importFrom Rcpp evalCpp
+#' @importFrom Rcpp sourceCpp
 #' @exportPattern "^[[:alpha:]]+"
 NULL
