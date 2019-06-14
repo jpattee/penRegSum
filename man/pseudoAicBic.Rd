@@ -5,7 +5,8 @@
 \title{Function to obtain pseudo-AIC and pseudo-BIC estimates given summary statistics and a reference panel}
 \usage{
 pseudoAicBic(penalizedBetas, betas, ses, N, refPanel, sigSqReg = 0.2,
-  sseReg = 0.1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL)
+  sseReg = 0.1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL,
+  standardized = TRUE)
 }
 \arguments{
 \item{penalizedBetas}{Polygenic risk score effect size estimates. These are the estimates for which we want to approximate AIC and BIC. May be a matrix.}

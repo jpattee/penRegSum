@@ -15,7 +15,7 @@
 #' @param standardized Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.
 #' @export
 
-pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL){
+pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL, standardized = TRUE){
 
   penalizedBetas = as.matrix(penalizedBetas)
   
@@ -56,7 +56,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
 
   tempEst = rep(0, length(ses))
   for(i in 1:length(ses)){
-    tempEst[i] = N *sds[i]^2 * ses[i]^2 + sds[i]^2*betas[i]^2
+    tempEst[i] = N[i] *sds[i]^2 * ses[i]^2 + sds[i]^2*betas[i]^2
   }
   ytyEst = median(tempEst)
 
