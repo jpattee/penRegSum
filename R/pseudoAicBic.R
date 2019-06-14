@@ -87,7 +87,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     qVec = c(qVec,qElast)
   
     xtxWeightDiag = covMat
-    diag(xtxWeightDiag) = diag(xtxWeightDiag) + sseReg
+    xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] =  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] + sseReg
     bxxbTemp = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
     bxxbWeight = t(penalizedBetasTemp)%*%xtxWeightDiag%*%penalizedBetasTemp
     bxxb = c(bxxb, bxxbTemp[1,1])
