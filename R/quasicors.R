@@ -10,6 +10,7 @@
 #' @param trainBetas Vector of univariate effect sizes for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype.
 #' @param trainBetas Vector of univariate standard errors for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype.
 #' @param standardized Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates. 
+#' @export
 
 quasicors <- function(testBetas, penalizedBetas, refPanel, allele1 = NULL, allele2 = NULL, trainBetas = NULL, trainSes = NULL, standardized = TRUE){
 

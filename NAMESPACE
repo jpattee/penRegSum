@@ -2,7 +2,5 @@
 
 export(elastSum)
 export(pseudoAicBic)
+export(quasicors)
 export(tlpSum)
-exportPattern("^[[:alpha:]]+")
-importFrom(Rcpp,evalCpp)
-useDynLib(penRegSum)
