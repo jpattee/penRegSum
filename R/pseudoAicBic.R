@@ -73,7 +73,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   #calculate sigma^2
   xtyTemp = xtyEst[sigSqInd]
   xtxTemp = covMat[sigSqInd,sigSqInd]
-  diag(xtxTemp) = diag(xtxTemp) + sigSqReg
+  Matrix::diag(xtxTemp) = Matrix::diag(xtxTemp) + sigSqReg
   xtxInvTemp = solve(xtxTemp)
   qTemp = length(sigSqInd)
   sigSqTilde = (ytyEst - t(xtyTemp)%*%xtxInvTemp%*%xtyTemp)*median(N) / (median(N) - qTemp)
