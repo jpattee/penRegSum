@@ -19,11 +19,11 @@ quasicors(testBetas, penalizedBetas, refPanel, allele1 = NULL,
 
 \item{allele2}{Vector of reference alleles for the penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.}
 
-\item{trainBetas}{Vector of univariate effect sizes for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype.}
+\item{trainBetas}{Vector of univariate effect sizes for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype. Unneccessary if standardized = FALSE.}
 
 \item{standardized}{Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.}
 
-\item{trainBetas}{Vector of univariate standard errors for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype.}
+\item{trainBetas}{Vector of univariate standard errors for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype. Unneccessary if standardized = FALSE.}
 }
 \value{
 a list with the following

@@ -2,14 +2,14 @@
 #' 
 #' @details Function finds the minimum of the elastic net objective function 
 #' 
-#' @param cor A vector of correlations
-#' @param bfile The stem of a PLINK binary file
-#' @param lambdas Vector of values of lambda
-#' @param alphas Vector of values of alpha
-#' @param s Vector of values for s
-#' @param thr Convergence threshold
-#' @param init Initial values for \eqn{\beta}
-#' @param maxIter Maximum number of iterations
+#' @param cor A vector of correlations, representing the univariate SNP-phenotype associations from the summary statistic data.
+#' @param bfile The stem of a PLINK binary file to be used as a reference panel.
+#' @param lambdas Vector of values of lambda.
+#' @param alphas Vector of values of alpha.
+#' @param s Vector of values for s.
+#' @param thr Convergence threshold.
+#' @param init Initial values for \eqn{\beta}.
+#' @param maxIter Maximum number of iterations.
 #' @param extract Vector of the indices of SNPs to keep. If null, will keep all SNPs.
 #' @export
 
@@ -95,9 +95,9 @@ elastSum <- function(cor, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, ma
   toReturn=structure(list(lambdas=lambdas,alphas=alphas,beta=lassoBetasFull[4:nrow(lassoBetasFull),],converged=converged,pred=yhatFull[4:nrow(yhatFull),]))
   return(toReturn)
   #' @return a list with the following
-  #' \item{lambdas} Same as lambdas input
-  #' \item{alphas} Same as alphas input
-  #' \item{beta} Matrix of estimated coefficients
-  #' \item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence
-  #' \item{pred} Matrix of predicted phenotypes
+  #' \item{lambdas} Same as lambdas input.
+  #' \item{alphas} Same as alphas input.
+  #' \item{beta} Matrix of estimated coefficients.
+  #' \item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.
+  #' \item{pred} Matrix of predicted phenotypes.
 }

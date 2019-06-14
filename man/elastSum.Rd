@@ -8,31 +8,31 @@ elastSum(cor, bfile, lambdas, alphas, s = 0.5, thr = 1e-04, init = NULL,
   maxIter = 1000, extract = NULL)
 }
 \arguments{
-\item{cor}{A vector of correlations}
+\item{cor}{A vector of correlations, representing the univariate SNP-phenotype associations from the summary statistic data.}
 
-\item{bfile}{The stem of a PLINK binary file}
+\item{bfile}{The stem of a PLINK binary file to be used as a reference panel.}
 
-\item{lambdas}{Vector of values of lambda}
+\item{lambdas}{Vector of values of lambda.}
 
-\item{alphas}{Vector of values of alpha}
+\item{alphas}{Vector of values of alpha.}
 
-\item{s}{Vector of values for s}
+\item{s}{Vector of values for s.}
 
-\item{thr}{Convergence threshold}
+\item{thr}{Convergence threshold.}
 
-\item{init}{Initial values for \eqn{\beta}}
+\item{init}{Initial values for \eqn{\beta}.}
 
-\item{maxIter}{Maximum number of iterations}
+\item{maxIter}{Maximum number of iterations.}
 
 \item{extract}{Vector of the indices of SNPs to keep. If null, will keep all SNPs.}
 }
 \value{
 a list with the following
-\item{lambdas} Same as lambdas input
-\item{alphas} Same as alphas input
-\item{beta} Matrix of estimated coefficients
-\item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence
-\item{pred} Matrix of predicted phenotypes
+\item{lambdas} Same as lambdas input.
+\item{alphas} Same as alphas input.
+\item{beta} Matrix of estimated coefficients.
+\item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.
+\item{pred} Matrix of predicted phenotypes.
 }
 \details{
 Function finds the minimum of the elastic net objective function

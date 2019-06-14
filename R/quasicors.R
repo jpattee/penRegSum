@@ -7,8 +7,8 @@
 #' @param refPanel PLINK stem for binary file to be used as the reference panel
 #' @param allele1 Vector of effect alleles for the penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.
 #' @param allele2 Vector of reference alleles for the penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.
-#' @param trainBetas Vector of univariate effect sizes for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype.
-#' @param trainBetas Vector of univariate standard errors for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype.
+#' @param trainBetas Vector of univariate effect sizes for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype. Unneccessary if standardized = FALSE.
+#' @param trainBetas Vector of univariate standard errors for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype. Unneccessary if standardized = FALSE.
 #' @param standardized Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates. 
 #' @export
 

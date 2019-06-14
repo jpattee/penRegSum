@@ -17,6 +17,7 @@
 
 pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL, standardized = TRUE){
 
+  if(length(N) == 1) N = rep(N, length(betas))
   penalizedBetas = as.matrix(penalizedBetas)
   
   bim = read.table(paste0(refPanel,".bim"),stringsAsFactors = FALSE)
