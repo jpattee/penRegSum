@@ -21,7 +21,7 @@ tlpSum <- function(cor, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIte
   bim=read.table(paste0(bfile,".bim"))
   P=nrow(bim)
 
-  _penRegSum_genoMat=genotypeMatrix(paste0(bfile,".bed"),N=N,P=P,integer(0),integer(0),integer(0),integer(0),1)
+  genoMat=genotypeMatrix(paste0(bfile,".bed"),N=N,P=P,integer(0),integer(0),integer(0),integer(0),1)
 
   sds=normalize2(genoMat)
   genoMat[is.na(genoMat)]=0
