@@ -10,21 +10,29 @@
 #' @param sigSqReg The matrix regularization parameter for the estimation of the residual variance. Default is .2.
 #' @param sseReg The matrix regularization parameter for the estimation of the SSE. Default is .1.
 #' @param sigSqInd Index of SNPs to be used for estimation of residual variance. If null, default is to pick the n/5 SNPs with largest univariate effect sizes, where n is the sample size of the reference panel.
+#' @param allele1 Vector of effect alleles for the penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.
+#' @param allele2 Vector of reference alleles for the penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.
+#' @param standardized Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.
 #' @export
 
-pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL){
+pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL){
 
-  tuneBim = read.table("tuning.bim",stringsAsFactors = FALSE)
-  p = nrow(tuneBim)
-  N = nrow(trainFam)
+  penalizedBetas = as.matrix(penalizedBetas)
+  
+  bim = read.table(paste0(refPanel,".bim"),stringsAsFactors = FALSE)
+  p = nrow(bim)
+  fam = read.table(paste0(refPanel,".fam"))
+  nFam = nrow(fam)
 
-  genoMat=genotypeMatrix("testing-1.bed",N=1560,P=p,integer(0),integer(0),integer(0),integer(0),1)
+  genoMat=genotypeMatrix(paste0(refPanel,".bed"),N=nFam,P=p,integer(0),integer(0),integer(0),integer(0),1)
 
-  flippedInd=which(trainBim$V5==tuneBim$V6 & trainBim$V5==tuneBim$V6)
-
+  if(!is.null(allele1)){
+    flippedInd = which(bim$V5==allele2 & bim$V5==allele1)
+    matchInd = which(bim$V5==allele1 & bim$V5==allele2)
+    betas[flippedInd] = betas[flippedInd] * -1
+  }
+  
   n = nrow(genoMat)
-
-  betas[flippedInd,] = betas[flippedInd,]
 
   covMat = cov(genoMat)
 
@@ -32,7 +40,6 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   sds = sds[,1]
   rm(genoMat)
 
-  #FOR NOW
   SSEvec = NULL
   qVec = NULL
   aicVec = NULL
@@ -40,9 +47,9 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   bxxb = NULL
   bxy = NULL
 
-  tempEst = rep(0, nrow(sumStats))
-  for(i in 1:nrow(sumStats)){
-    tempEst[i] = N *sds[i]^2 * ses[i,l]^2 + sds[i]^2*betas[i,l]^2
+  tempEst = rep(0, length(ses))
+  for(i in 1:length(ses)){
+    tempEst[i] = N *sds[i]^2 * ses[i]^2 + sds[i]^2*betas[i]^2
   }
   ytyEst = median(tempEst)
 
@@ -67,8 +74,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   for(k in 1:ncol(penalizedBetas)){
     penalizedBetasTemp = penalizedBetas[,k]
 
-    penalizedBetasTemp = penalizedBetasTemp *sqrt(ytyEst) /sds
-
+    if(standardized) penalizedBetasTemp = penalizedBetasTemp *sqrt(ytyEst) /sds
 
     qElast = sum(penalizedBetasTemp!=0)
     qVec = c(qVec,qElast)
@@ -101,7 +107,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   #' \item{bic} Estimates of BIC for the candidate polygenic risk scores.
   #' \item{SSE} Estimates of SSE for the candidate polygenic risk scores.
   #' \item{q} Number of active parameters for the candidate polygenic risk scores.
-  #' \item{bxxb} Estimates of the b'x'xb quantity for the candidate polygenic risk scores
-  #' \item{bxy} Estimates of b'x'y for the candidate polygenic risk scores.
+  #' \item{bxxb} Estimates of the variance of the predicted phenotype resulting from the polygenic risk score applied to the reference panel: b'x'xb.
+  #' \item{bxy} Estimates of the dot product of the polygenic risk score and the univariate effect size estimates: b'x'y.
   #' \item{sigSqTilde} Estimate of the residual variance.
 }
