@@ -15,7 +15,7 @@ pseudoAicBic(penalizedBetas, betas, ses, N, refPanel, sigSqReg = 0.2,
 
 \item{ses}{Standard errors of the univariate effect size estimates.}
 
-\item{N}{Sample sizes corresponding to the univariate effect size estimates. Can be a constant.}
+\item{N}{Sample sizes corresponding to the univariate effect size estimates. Can be a constant or a vector.}
 
 \item{refPanel}{Stem of PLINK binary file}
 

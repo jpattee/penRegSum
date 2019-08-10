@@ -29,8 +29,6 @@ tlpSum <- function(cor, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIte
   lassoBetasFull=NULL
   yhatFull=NULL
   converged=NULL
-  lambdas=lambdas
-  taus=taus
   maxIter=maxIter
   s=s
 
@@ -48,8 +46,10 @@ tlpSum <- function(cor, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIte
     if(i==1) sMult[i] = 1-s[i]
     else sMult[i] = (1-s[i])/(1-s[i-1])
   }
-
-  betas=cor
+  
+  temp = rep(lambdas, each = length(taus))
+  taus = rep(taus, length(lambdas))
+  lambdas = temp
 
   for(k in 1:length(s)){
     genoMat=genoMat*sqrt(sMult[k])
@@ -73,7 +73,7 @@ tlpSum <- function(cor, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIte
             if(iterator==1) lambdaTmp=lambda
             xj=lassoBetas[j]
             lassoBetas[j]=0
-            tempEst=diagVec[j]*xj + betas[j] - sum(genoMat[,j]*yhat)
+            tempEst=diagVec[j]*xj + cor[j] - sum(genoMat[,j]*yhat)
             if(sds[j]==0) tempEst=0
             if(abs(tempEst)>lambdaTmp){
               tempSign=sign(tempEst)

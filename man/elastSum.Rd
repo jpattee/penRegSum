@@ -31,7 +31,7 @@ a list with the following
 \item{lambdas} Same as lambdas input.
 \item{alphas} Same as alphas input.
 \item{beta} Matrix of estimated coefficients.
-\item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.
+\item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is alpha value, column 3 is s value, column 4 is 1 if there was convergence.
 \item{pred} Matrix of predicted phenotypes.
 }
 \details{

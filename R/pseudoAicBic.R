@@ -5,7 +5,7 @@
 #' @param penalizedBetas Polygenic risk score effect size estimates. These are the estimates for which we want to approximate AIC and BIC. May be a matrix.
 #' @param betas Univariate effect size estimates.
 #' @param ses Standard errors of the univariate effect size estimates.
-#' @param N Sample sizes corresponding to the univariate effect size estimates. Can be a constant.
+#' @param N Sample sizes corresponding to the univariate effect size estimates. Can be a constant or a vector.
 #' @param refPanel Stem of PLINK binary file
 #' @param sigSqReg The matrix regularization parameter for the estimation of the residual variance. Default is .2.
 #' @param sseReg The matrix regularization parameter for the estimation of the SSE. Default is .1.
