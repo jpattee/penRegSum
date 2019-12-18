@@ -5,15 +5,15 @@
 \title{Function to obtain quasi-correlation estimates given}
 \usage{
 quasicors(testBetas, testSes, N, penalizedBetas, refPanel, allele1 = NULL,
-  allele2 = NULL, standardized = TRUE, trainBetas = NULL,
-  trainSes = NULL, trainN = NULL)
+  allele2 = NULL, standardized = TRUE, trainVar = NULL,
+  allele1.test = NULL, allele2.test = NULL)
 }
 \arguments{
 \item{testBetas}{Univariate effect sizes for the out-of-sample data}
 
 \item{testSes}{Univariate standard errors for the effect sizes of the out-of-sample data}
 
-\item{N}{Sample sizes corresponding to the univariate effect size estimates. Can be a constant or a vector.}
+\item{N}{Sample sizes corresponding to the testBetas. Can be a constant or a vector.}
 
 \item{penalizedBetas}{The polygenic risk scores to be tested on the out-of-sample data. May be a matrix.}
 
@@ -25,11 +25,11 @@ quasicors(testBetas, testSes, N, penalizedBetas, refPanel, allele1 = NULL,
 
 \item{standardized}{Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.}
 
-\item{trainBetas}{Vector of univariate effect sizes for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype. Unneccessary if standardized = FALSE.}
+\item{trainVar}{Phenotypic variance for data used to estimate the penalizedBetas. Only necessary if standardized = TRUE}
 
-\item{trainN}{Sample size of the training data. Can be a constant or a vector.}
+\item{allele1.test}{Vector of effect alleles for the testBetas. Corresponds to the fifth column of a PLINK .bim file.}
 
-\item{trainBetas}{Vector of univariate standard errors for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype. Unneccessary if standardized = FALSE.}
+\item{allele2.test}{Vector of reference alleles for the testBetas. Corresponds to the sixth column of a PLINK .bim file.}
 }
 \value{
 a list with the following

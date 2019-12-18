@@ -10,6 +10,12 @@
 // [[Rcpp:depends(RcppArmadillo)]]
 using namespace Rcpp;
 
+/*The code in this file was taken from the LassoSum R package. This package is publically available on GitHub at 
+ * https://github.com/tshmak/lassosum. The LassoSum package was released in conjunction with 'Polygenic scores via
+ * penalized regression on summary statistics', Mak et al., 2017.
+*/
+
+
 /**
 Opens a Plink binary files
 @s file name

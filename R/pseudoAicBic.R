@@ -10,8 +10,8 @@
 #' @param sigSqReg The matrix regularization parameter for the estimation of the residual variance. Default is .2.
 #' @param sseReg The matrix regularization parameter for the estimation of the SSE. Default is .1.
 #' @param sigSqInd Index of SNPs to be used for estimation of residual variance. If null, default is to pick the n/5 SNPs with largest univariate effect sizes, where n is the sample size of the reference panel.
-#' @param allele1 Vector of effect alleles for the penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.
-#' @param allele2 Vector of reference alleles for the penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.
+#' @param allele1 Vector of effect alleles for the betas and penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.
+#' @param allele2 Vector of reference alleles for the betas and penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.
 #' @param standardized Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.
 #' @export
 
@@ -27,6 +27,8 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
 
   genoMat=genotypeMatrix(paste0(refPanel,".bed"),N=nFam,P=p,integer(0),integer(0),integer(0),integer(0),1)
 
+  flippedInd = NULL
+  
   if(!is.null(allele1)){
     flippedInd = which(bim$V5==allele2 & bim$V5==allele1)
     matchInd = which(bim$V5==allele1 & bim$V5==allele2)
@@ -81,6 +83,8 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
 
   for(k in 1:ncol(penalizedBetas)){
     penalizedBetasTemp = penalizedBetas[,k]
+    
+    if(length(flippedInd) > 0) penalizedBetasTemp[flippedInd] = penalizedBetasTemp[flippedInd]*-1
 
     if(standardized) penalizedBetasTemp = penalizedBetasTemp *sqrt(ytyEst) /sds
 

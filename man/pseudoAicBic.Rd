@@ -25,9 +25,9 @@ pseudoAicBic(penalizedBetas, betas, ses, N, refPanel, sigSqReg = 0.2,
 
 \item{sigSqInd}{Index of SNPs to be used for estimation of residual variance. If null, default is to pick the n/5 SNPs with largest univariate effect sizes, where n is the sample size of the reference panel.}
 
-\item{allele1}{Vector of effect alleles for the penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.}
+\item{allele1}{Vector of effect alleles for the betas and penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.}
 
-\item{allele2}{Vector of reference alleles for the penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.}
+\item{allele2}{Vector of reference alleles for the betas and penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.}
 
 \item{standardized}{Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.}
 }

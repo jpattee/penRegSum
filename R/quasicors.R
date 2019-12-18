@@ -4,18 +4,18 @@
 #' 
 #' @param testBetas Univariate effect sizes for the out-of-sample data
 #' @param testSes Univariate standard errors for the effect sizes of the out-of-sample data
-#' @param N Sample sizes corresponding to the univariate effect size estimates. Can be a constant or a vector.
+#' @param N Sample sizes corresponding to the testBetas. Can be a constant or a vector.
 #' @param penalizedBetas The polygenic risk scores to be tested on the out-of-sample data. May be a matrix.
 #' @param refPanel PLINK stem for binary file to be used as the reference panel
 #' @param allele1 Vector of effect alleles for the penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.
 #' @param allele2 Vector of reference alleles for the penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.
 #' @param standardized Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates. 
-#' @param trainBetas Vector of univariate effect sizes for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype. Unneccessary if standardized = FALSE.
-#' @param trainBetas Vector of univariate standard errors for the data used to estimate the polygenic risk score. Used to estimate variance of training phenotype. Unneccessary if standardized = FALSE.
-#' @param trainN Sample size of the training data. Can be a constant or a vector.
+#' @param trainVar Phenotypic variance for data used to estimate the penalizedBetas. Only necessary if standardized = TRUE
+#' @param allele1.test Vector of effect alleles for the testBetas. Corresponds to the fifth column of a PLINK .bim file.
+#' @param allele2.test Vector of reference alleles for the testBetas. Corresponds to the sixth column of a PLINK .bim file.
 #' @export
 
-quasicors <- function(testBetas, testSes, N, penalizedBetas, refPanel, allele1 = NULL, allele2 = NULL, standardized = TRUE, trainBetas = NULL, trainSes = NULL, trainN = NULL){
+quasicors <- function(testBetas, testSes, N, penalizedBetas, refPanel, allele1 = NULL, allele2 = NULL, standardized = TRUE, trainVar = NULL, allele1.test = NULL, allele2.test = NULL){
   if(length(N) == 1) N = rep(N, length(betas))
   
   penalizedBetas = as.matrix(penalizedBetas)
@@ -23,10 +23,13 @@ quasicors <- function(testBetas, testSes, N, penalizedBetas, refPanel, allele1 =
   bim = read.table(paste0(refPanel,".bim"), stringsAsFactors = FALSE)
 
   if(!is.null(allele1)){
-    flippedInd = which(bim$V5==allele2 & bim$V5==allele1)
-    matchInd = which(bim$V5==allele1 & bim$V5==allele2)
-    testBetas[flippedInd] = testBetas[flippedInd] * -1
+    flippedInd = which(bim$V5==allele2 & bim$V6==allele1)
     penalizedBetas[flippedInd,] = penalizedBetas[flippedInd,] * -1
+  }
+  
+  if(!is.null(allele1.test)){
+    flippedIndTest = which(bim$V5==allele2.test & bim$V6==allele1.test)
+    testBetas[flippedIndTest] = testBetas[flippedIndTest] * -1
   }
 
   p = nrow(bim)
@@ -48,16 +51,6 @@ quasicors <- function(testBetas, testSes, N, penalizedBetas, refPanel, allele1 =
   sds = normalize(genoMat)
   rm(genoMat)
 
-
-  #estimate yty if not standardized
-  if(standardized){
-    tempEst = rep(0, length(trainSes))
-    for(i in 1:length(trainSes)){
-      tempEst[i] = trainN[i] * sds[i]^2 * trainSes[i]^2 + sds[i]^2*trainBetas[i]^2
-    }
-    ytyEst = median(tempEst,na.rm = TRUE)
-  }
-  
   #estimate yty for the test data
   tempEstTest = rep(0, length(testSes))
   for(i in 1:length(testSes)){
@@ -71,7 +64,7 @@ quasicors <- function(testBetas, testSes, N, penalizedBetas, refPanel, allele1 =
   denom = rep(0, ncol(penalizedBetas))
   for(i in 1:length(quasicorrelations)){
     penalizedBetasTemp = penalizedBetas[,i]
-    if(standardized) penalizedBetasTemp = penalizedBetas[,i]*sqrt(ytyEst)/sds
+    if(standardized) penalizedBetasTemp = penalizedBetas[,i]*sqrt(trainVar)/sds
     num[i] = sum((sds^2)*testBetas*penalizedBetasTemp)
     denom[i] = sqrt(t(penalizedBetasTemp)%*%V%*%penalizedBetasTemp)
     quasicorrelations[i] = num[i]/(denom[i]*sqrt(ytyEstTest))
