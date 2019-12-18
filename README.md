@@ -1,10 +1,6 @@
 # penRegSum
-R Package that implements penalized regression methods for genetic data using summary statistics and a reference panel.
+'penRegSum' is an R package that implements penalized regression methods for genetic data using summary statistics and a reference panel. This R package can be thought of as a close companion to the LassoSum package: https://github.com/tshmak/lassosum. The LassoSum documentation may prove helpful in implementing our package, as the use cases and requirements are very similar.
 
-Implements TLP, and elastic net penalized regression models. Note that the lassoSum model is a special case of the elastic net model.
+penRegSum implements TLP and elastic net penalized regression models within the framework of summary statistics and referenc panels. Note that the lassoSum model is a special case of the elastic net model. This package also immplements the pseudo-AIC and pseudo-BIC methods for model selection in situations where validation data is not available. This package additionally implements the quasi-correlation method, which assesses the predictive accuracy of a polygenic risk score applied to out-of-sample data comprised of summary statistics.
 
-Implements pseudo-AIC and pseudo-BIC methods for situations where validation data is not available.
-
-Implements quasi-correlation method to assess predictive accuracy of a polygenic risk score on out of sample data comprised of summary statistics.
-
-Note that much of the C++ code in this package is repurposed from the LassoSum R package: https://github.com/tshmak/lassosum.
+Note that much of the C++ code in this package is repurposed from the LassoSum R package.
