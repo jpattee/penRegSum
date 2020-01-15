@@ -4,11 +4,11 @@
 \alias{elastSum}
 \title{Function to obtain elastic net effect size estimates given summary statistics and a reference panel}
 \usage{
-elastSum(cor, bfile, lambdas, alphas, s = 0.5, thr = 1e-04, init = NULL,
-  maxIter = 1000, extract = NULL)
+elastSum(cors, bfile, lambdas, alphas, s = 0.5, thr = 1e-04, init = NULL,
+  maxIter = 1000, extract = NULL, ldBlocks = NULL)
 }
 \arguments{
-\item{cor}{A vector of correlations, representing the univariate SNP-phenotype associations from the summary statistic data.}
+\item{cors}{A vector of correlations, representing the univariate SNP-phenotype associations from the summary statistic data.}
 
 \item{bfile}{The stem of a PLINK binary file to be used as a reference panel.}
 
@@ -25,11 +25,14 @@ elastSum(cor, bfile, lambdas, alphas, s = 0.5, thr = 1e-04, init = NULL,
 \item{maxIter}{Maximum number of iterations.}
 
 \item{extract}{Vector of the indices of SNPs to keep. If null, will keep all SNPs.}
+
+\item{ldBlocks}{Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.}
 }
 \value{
 a list with the following
-\item{lambdas} Same as lambdas input.
-\item{alphas} Same as alphas input.
+\item{lambdas} Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
+\item{alphas} Vector of alpha values corresponding to columns of output files 'beta' and 'pred'
+\item{s} Vector of s values corresponding to columns of output files 'beta' and 'pred'
 \item{beta} Matrix of estimated coefficients.
 \item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is alpha value, column 3 is s value, column 4 is 1 if there was convergence.
 \item{pred} Matrix of predicted phenotypes.

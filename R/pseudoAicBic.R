@@ -13,9 +13,10 @@
 #' @param allele1 Vector of effect alleles for the betas and penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.
 #' @param allele2 Vector of reference alleles for the betas and penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.
 #' @param standardized Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.
+#' @param ldBlocks Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.
 #' @export
 
-pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL, standardized = TRUE){
+pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL, standardized = TRUE, ldBlocks = NULL){
 
   if(length(N) == 1) N = rep(N, length(betas))
   penalizedBetas = as.matrix(penalizedBetas)
@@ -37,12 +38,32 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
   n = nrow(genoMat)
   
-  matList = vector("list", length(unique(bim$V1)))
+  if(!is.null(ldBlocks)){
+    ldDat = read.table(ldBlocks, header = TRUE)
+    ldDat[,1] = as.character(sub("^chr","",ldDat[,1], ignore.case = TRUE))
+  }
+  
+  #if the LD blocks file is null, do estimation by chromosome
+  if(is.null(ldBlocks)){
+    vec1 = c(1:22)
+    vec2 = rep(0, 22)
+    vec3 = rep(Inf, 22)
+    ldDat = cbind.data.frame(vec1,vec2,vec3)
+  }
+  
+  matList = vector("list")
   matListInd = 1
-  for(i in unique(bim$V1)){
-    tempInd = which(bim$V1 == i)
-    matList[[matListInd]] = cov(genoMat[,tempInd])
-    matListInd = matListInd+1
+  
+  for(i in 1:nrow(ldDat)){
+    curChr = substring(ldDat[i,1],4)
+    curMin = ldDat[i,2]
+    curMax = ldDat[i,3]
+    curSnps = bim$V2[bim$V4 > curMin & bim$V4 <= curMax & bim$V1 == curChr]
+    tempInd = which(bim$V2%in%curSnps)
+    if(length(tempInd) > 0){
+      matList[[matListInd]] = cov(genoMat[,tempInd, drop = FALSE])
+      matListInd = matListInd+1
+    }
   }
   covMat = bdiag(matList)
 

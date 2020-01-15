@@ -13,6 +13,7 @@
 #' @param trainVar Phenotypic variance for data used to estimate the penalizedBetas. Only necessary if standardized = TRUE
 #' @param allele1.test Vector of effect alleles for the testBetas. Corresponds to the fifth column of a PLINK .bim file.
 #' @param allele2.test Vector of reference alleles for the testBetas. Corresponds to the sixth column of a PLINK .bim file.
+#' @param ldBlocks Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.
 #' @export
 
 quasicors <- function(testBetas, testSes, N, penalizedBetas, refPanel, allele1 = NULL, allele2 = NULL, standardized = TRUE, trainVar = NULL, allele1.test = NULL, allele2.test = NULL){
@@ -39,12 +40,33 @@ quasicors <- function(testBetas, testSes, N, penalizedBetas, refPanel, allele1 =
 
   genoMat=genotypeMatrix(paste0(refPanel,".bed"),N=nFam,P=p,integer(0),integer(0),integer(0),integer(0),1)
 
-  matList = vector("list", length(unique(bim$V1)))
+  #If LD blocks are specified, format the file and proceed
+  if(!is.null(ldBlocks)){
+    ldDat = read.table(ldBlocks, header = TRUE)
+    ldDat[,1] = as.character(sub("^chr","",ldDat[,1], ignore.case = TRUE))
+  }
+  
+  #if the LD blocks file is null, do estimation by chromosome
+  if(is.null(ldBlocks)){
+    vec1 = c(1:22)
+    vec2 = rep(0, 22)
+    vec3 = rep(Inf, 22)
+    ldDat = cbind.data.frame(vec1,vec2,vec3)
+  }
+  
+  matList = vector("list")
   matListInd = 1
-  for(i in unique(bim$V1)){
-    tempInd = which(bim$V1 == i)
-    matList[[matListInd]] = cov(genoMat[,tempInd])
-    matListInd = matListInd+1
+  
+  for(i in 1:nrow(ldDat)){
+    curChr = substring(ldDat[i,1],4)
+    curMin = ldDat[i,2]
+    curMax = ldDat[i,3]
+    curSnps = bim$V2[bim$V4 > curMin & bim$V4 <= curMax & bim$V1 == curChr]
+    tempInd = which(bim$V2%in%curSnps)
+    if(length(tempInd) > 0){
+      matList[[matListInd]] = cov(genoMat[,tempInd, drop = FALSE])
+      matListInd = matListInd+1
+    }
   }
   V = bdiag(matList)
 

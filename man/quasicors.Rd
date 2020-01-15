@@ -30,6 +30,8 @@ quasicors(testBetas, testSes, N, penalizedBetas, refPanel, allele1 = NULL,
 \item{allele1.test}{Vector of effect alleles for the testBetas. Corresponds to the fifth column of a PLINK .bim file.}
 
 \item{allele2.test}{Vector of reference alleles for the testBetas. Corresponds to the sixth column of a PLINK .bim file.}
+
+\item{ldBlocks}{Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.}
 }
 \value{
 a list with the following
