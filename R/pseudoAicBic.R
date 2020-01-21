@@ -13,20 +13,21 @@
 #' @param allele1 Vector of effect alleles for the betas and penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.
 #' @param allele2 Vector of reference alleles for the betas and penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.
 #' @param standardized Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.
+#' @param extract Vector of the indices of SNPs to keep. If null, will keep all SNPs.
 #' @param ldBlocks Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.
 #' @export
 
-pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL, standardized = TRUE, ldBlocks = NULL){
+pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL, standardized = TRUE, extract = NULL, ldBlocks = NULL){
 
   if(length(N) == 1) N = rep(N, length(betas))
   penalizedBetas = as.matrix(penalizedBetas)
   
   bim = read.table(paste0(refPanel,".bim"),stringsAsFactors = FALSE)
-  p = nrow(bim)
+  P = nrow(bim)
   fam = read.table(paste0(refPanel,".fam"))
-  nFam = nrow(fam)
+  n = nrow(fam)
 
-  genoMat=genotypeMatrix(paste0(refPanel,".bed"),N=nFam,P=p,integer(0),integer(0),integer(0),integer(0),1)
+  genoMat=genotypeMatrix(paste0(refPanel,".bed"),N=nFam,P=P,integer(0),integer(0),integer(0),integer(0),1)
 
   flippedInd = NULL
   
@@ -36,7 +37,13 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     betas[flippedInd] = betas[flippedInd] * -1
   }
   
-  n = nrow(genoMat)
+  if(is.null(extract)) extract=c(1:P)
+  
+  if(sum(extract!=FALSE)!=P) P=P-sum(extract==FALSE)
+  if(length(extract)<P) P = length(extract)
+  
+  genoMat=genoMat[,extract]
+  bim = bim[extract,]
   
   if(!is.null(ldBlocks)){
     ldDat = read.table(ldBlocks, header = TRUE)

@@ -6,7 +6,7 @@
 \usage{
 pseudoAicBic(penalizedBetas, betas, ses, N, refPanel, sigSqReg = 0.2,
   sseReg = 0.1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL,
-  standardized = TRUE, ldBlocks = NULL)
+  standardized = TRUE, extract = NULL, ldBlocks = NULL)
 }
 \arguments{
 \item{penalizedBetas}{Polygenic risk score effect size estimates. These are the estimates for which we want to approximate AIC and BIC. May be a matrix.}
@@ -30,6 +30,8 @@ pseudoAicBic(penalizedBetas, betas, ses, N, refPanel, sigSqReg = 0.2,
 \item{allele2}{Vector of reference alleles for the betas and penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.}
 
 \item{standardized}{Set to true if the coefficient estimates for penalizedBetas are standardized. Note that elastSum and tlpSum output standardized estimates.}
+
+\item{extract}{Vector of the indices of SNPs to keep. If null, will keep all SNPs.}
 
 \item{ldBlocks}{Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.}
 }
