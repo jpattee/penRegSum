@@ -27,7 +27,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   fam = read.table(paste0(refPanel,".fam"))
   n = nrow(fam)
 
-  genoMat=genotypeMatrix(paste0(refPanel,".bed"),N=nFam,P=P,integer(0),integer(0),integer(0),integer(0),1)
+  genoMat=genotypeMatrix(paste0(refPanel,".bed"),N=n,P=P,integer(0),integer(0),integer(0),integer(0),1)
 
   flippedInd = NULL
   
