@@ -67,7 +67,7 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
   permList = NULL
   
   for(b in 1:nrow(ldDat)){
-    curChr = substring(ldDat[b,1],4)
+    curChr = ldDat[b,1]
     curMin = ldDat[b,2]
     curMax = ldDat[b,3]
     curSnps = bim$V2[bim$V4 > curMin & bim$V4 <= curMax & bim$V1 == curChr]
