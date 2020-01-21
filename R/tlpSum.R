@@ -117,7 +117,7 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
           }
           converged=rbind(converged,c(lambda,tau,s[k],iterator!=maxIter))
           lassoBetasBlock=cbind(lassoBetasBlock,lassoBetas)
-          yhatBlock=cbind(yhatFull,cbind(yhatBlock,yhat))
+          yhatBlock=cbind(yhatBlock,yhat)
         }
       }
       lassoBetasFull = rbind(lassoBetasFull,lassoBetasBlock)
