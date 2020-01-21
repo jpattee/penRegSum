@@ -134,7 +134,7 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
   tempLambdas = rep(lambdas, length(s))
   tempAlphas = rep(alphas, length(s))
   
-  toReturn=structure(list(lambdas=tempLambdas, alphas=tempAlphas, s = tempS, beta=lassoBetasFull, converged=converged, pred=yhatFull))
+  toReturn=structure(list(lambdas=tempLambdas, alphas=tempAlphas, s = tempS, beta=lassoBetasFull, converged=convergedFull, pred=yhatFull))
   return(toReturn)
   #' @return a list with the following
   #' \item{lambdas}Vector of lambda values corresponding to columns of output files 'beta' and 'pred'

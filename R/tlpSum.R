@@ -135,7 +135,7 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
   tempLambdas = rep(lambdas, length(s))
   tempTaus = rep(taus, length(s))
   
-  toReturn=structure(list(lambdas=tempLambdas,taus=tempTaus,s=tempS,beta=lassoBetasFull,converged=converged,pred=yhatFull))
+  toReturn=structure(list(lambdas=tempLambdas,taus=tempTaus,s=tempS,beta=lassoBetasFull,converged=convergedFull,pred=yhatFull))
   return(toReturn)
   #' @return a list with the following
   #' \item{lambdas}Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
