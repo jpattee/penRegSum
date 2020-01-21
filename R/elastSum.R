@@ -70,8 +70,8 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
     curChr = substring(ldDat[b,1],4)
     curMin = ldDat[b,2]
     curMax = ldDat[b,3]
-    curSnps = tuneBim$V2[tuneBim$V4 > curMin & tuneBim$V4 <= curMax & tuneBim$V1 == curChr]
-    curInd = which(tuneBim$V2%in%curSnps)
+    curSnps = bim$V2[bim$V4 > curMin & bim$V4 <= curMax & bim$V1 == curChr]
+    curInd = which(bim$V2%in%curSnps)
     permList = c(permList,curInd)
     if(length(curInd) > 0){
       corTemp = cors[curInd]
