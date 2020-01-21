@@ -39,6 +39,7 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
   if(is.null(init)) init = rep(0,P)
   
   genoMat=genoMat[,extract]
+  bim = bim[extract,]
   
   sMult=rep(0, length(s))
   for(i in 1:length(s)){
@@ -98,7 +99,7 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
             for(j in 1:length(lassoBetas)){
               xj=lassoBetas[j]
               lassoBetas[j]=0
-              tempEst=diagVec[j]*xj + corTemp[j] - sum(genoMatTemp[,j]*yhat)
+              tempEst=diagVec[j]*xj + corTemp[j] - mean(genoMatTemp[,j]*yhat)
               if(zeroSD[j]==1) tempEst=0
               if(abs(tempEst)>(lambda*alpha)){
                 if(tempEst>0){newEst=(tempEst-(lambda*alpha))/denom[j]}
@@ -116,7 +117,7 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
           }
           converged=rbind(converged,c(lambda,alpha,s[l],iterator!=maxIter))
           lassoBetasBlock=cbind(lassoBetasBlock,lassoBetas)
-          yhatBlock=cbind(yhatFull,cbind(yhatBlock,yhat))
+          yhatBlock=cbind(yhatBlock,yhat)
         }
       }
       lassoBetasFull = rbind(lassoBetasFull,lassoBetasBlock)

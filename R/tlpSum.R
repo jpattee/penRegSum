@@ -39,6 +39,7 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
   if(is.null(init)) init = rep(0,P)
   
   genoMat=genoMat[,extract]
+  bim = bim[extract,]
   
   sMult=rep(0, length(s))
   for(i in 1:length(s)){
@@ -100,7 +101,7 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
               if(iterator==1) lambdaTmp=lambda
               xj=lassoBetas[j]
               lassoBetas[j]=0
-              tempEst=diagVec[j]*xj + corTemp[j] - sum(genoMatTemp[,j]*yhat)
+              tempEst=diagVec[j]*xj + corTemp[j] - mean(genoMatTemp[,j]*yhat)
               if(zeroSD[j]==1) tempEst=0
               if(abs(tempEst)>lambdaTmp){
                 tempSign=sign(tempEst)
