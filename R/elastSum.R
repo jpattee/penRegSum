@@ -90,7 +90,7 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
           lambda=lambdas[i]
           alpha=alphas[i]
           lassoBetas=init[curInd]
-          yhat=rep(0, nrow(genoMatTemp))
+          yhat=genoMatTemp%*%lassoBetas
           while(maxDiff>thr & iterator<maxIter){
             iterator=iterator+1
             lassoBetasOld=lassoBetas

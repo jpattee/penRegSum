@@ -89,7 +89,7 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
           lambda=lambdas[i]
           tau=taus[i]
           lassoBetas=init[curInd]
-          yhat=genoMat%*%lassoBetas
+          yhat=genoMatTemp%*%lassoBetas
           while(maxDiff>1e-4 & iterator<maxIter){
             iterator=iterator+1
             lassoBetasOld=lassoBetas
