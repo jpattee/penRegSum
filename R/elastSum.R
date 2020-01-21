@@ -78,7 +78,8 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
       lassoBetasBlock = NULL
       yhatBlock = NULL
       converged = NULL
-      zeroSD = which(sds[curInd] == 0)
+      zeroSD = rep(0, length(curInd))
+      zeroSD[sds[curInd] == 0] = 1
       for(l in 1:length(s)){
         genoMatTemp=genoMat[,curInd, drop=FALSE]*sqrt(1 - s[l])
         diagVec=rep(1-s[l],length(curInd))

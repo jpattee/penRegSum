@@ -77,7 +77,8 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
       lassoBetasBlock = NULL
       yhatBlock = NULL
       converged = NULL
-      zeroSD = which(sds[curInd] == 0)
+      zeroSD = rep(0, length(curInd))
+      zeroSD[sds[curInd] == 0] = 1
       for(k in 1:length(s)){
         genoMatTemp=genoMat[,curInd, drop=FALSE]*sqrt(1 - s[k])
         diagVec=rep(1-s[k],length(curInd))
