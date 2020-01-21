@@ -65,10 +65,10 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
   }
   
   permList = NULL
-  for(b in 1:nrow(ldBlocks)){
-    curChr = substring(ldBlocks[b,1],4)
-    curMin = ldBlocks[b,2]
-    curMax = ldBlocks[b,3]
+  for(b in 1:nrow(ldDat)){
+    curChr = substring(ldDat[b,1],4)
+    curMin = ldDat[b,2]
+    curMax = ldDat[b,3]
     curSnps = tuneBim$V2[tuneBim$V4 > curMin & tuneBim$V4 <= curMax & tuneBim$V1 == curChr]
     curInd = which(tuneBim$V2%in%curSnps)
     permList = c(permList,curInd)
@@ -138,11 +138,11 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
   toReturn=structure(list(lambdas=tempLambdas,taus=tempTaus,s=tempS,beta=lassoBetasFull,converged=converged,pred=yhatFull))
   return(toReturn)
   #' @return a list with the following
-  #' \item{lambdas} Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{taus} Vector of tau values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{s} Vector of s values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{beta} Matrix of estimated coefficients.
-  #' \item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.
-  #' \item{pred} Matrix of predicted phenotypes.
+  #' \item{lambdas}Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
+  #' \item{taus}Vector of tau values corresponding to columns of output files 'beta' and 'pred'
+  #' \item{s}Vector of s values corresponding to columns of output files 'beta' and 'pred'
+  #' \item{beta}Matrix of estimated coefficients.
+  #' \item{converged}Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.
+  #' \item{pred}Matrix of predicted phenotypes.
 }
 

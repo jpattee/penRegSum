@@ -94,7 +94,7 @@ quasicors <- function(testBetas, testSes, N, penalizedBetas, refPanel, allele1 =
   toReturn = structure(list(quasicorrelations = quasicorrelations, bxy = num, bxxb = denom^2))
   return(toReturn)
   #' @return a list with the following
-  #' \item{quasicorrelations} Quasi-correlation values for each of the input polygenic risk scores.
-  #' \item{bxy} The estimate of the dot product of the univariate out-of-sample effect size estimates and the candidate polygenic risk score: b'x'y.
-  #' \item{bxxb} The estimate of the variance of the predicted phenotype for the out of sample data: b'x'xb.
+  #' \item{quasicorrelations}Quasi-correlation values for each of the input polygenic risk scores.
+  #' \item{bxy}The estimate of the dot product of the univariate out-of-sample effect size estimates and the candidate polygenic risk score: b'x'y.
+  #' \item{bxxb}The estimate of the variance of the predicted phenotype for the out of sample data: b'x'xb.
 }

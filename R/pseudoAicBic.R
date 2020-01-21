@@ -136,11 +136,11 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   toReturn = structure(list(aic = aicVec, bic=bicVec, SSE = SSEvec, q = qVec, bxxb = bxxb, bxy = bxy, sigSqTilde = sigSqTilde))
   return(toReturn)
   #' @return a list with the following
-  #' \item{aic} Estimates of AIC for the candidate polygenic risk scores.
-  #' \item{bic} Estimates of BIC for the candidate polygenic risk scores.
-  #' \item{SSE} Estimates of SSE for the candidate polygenic risk scores.
-  #' \item{q} Number of active parameters for the candidate polygenic risk scores.
-  #' \item{bxxb} Estimates of the variance of the predicted phenotype resulting from the polygenic risk score applied to the reference panel: b'x'xb.
-  #' \item{bxy} Estimates of the dot product of the polygenic risk score and the univariate effect size estimates: b'x'y.
+  #' \item{aic}Estimates of AIC for the candidate polygenic risk scores.
+  #' \item{bic}Estimates of BIC for the candidate polygenic risk scores.
+  #' \item{SSE}Estimates of SSE for the candidate polygenic risk scores.
+  #' \item{q}Number of active parameters for the candidate polygenic risk scores.
+  #' \item{bxxb}Estimates of the variance of the predicted phenotype resulting from the polygenic risk score applied to the reference panel: b'x'xb.
+  #' \item{bxy}Estimates of the dot product of the polygenic risk score and the univariate effect size estimates: b'x'y.
   #' \item{sigSqTilde} Estimate of the residual variance.
 }

@@ -30,12 +30,12 @@ elastSum(cors, bfile, lambdas, alphas, s = 0.5, thr = 1e-04, init = NULL,
 }
 \value{
 a list with the following
-\item{lambdas} Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
-\item{alphas} Vector of alpha values corresponding to columns of output files 'beta' and 'pred'
-\item{s} Vector of s values corresponding to columns of output files 'beta' and 'pred'
-\item{beta} Matrix of estimated coefficients.
-\item{converged} Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is alpha value, column 3 is s value, column 4 is 1 if there was convergence.
-\item{pred} Matrix of predicted phenotypes.
+\item{lambdas}Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
+\item{alphas}Vector of alpha values corresponding to columns of output files 'beta' and 'pred'
+\item{s}Vector of s values corresponding to columns of output files 'beta' and 'pred'
+\item{beta}Matrix of estimated coefficients.
+\item{converged}Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is alpha value, column 3 is s value, column 4 is 1 if there was convergence.
+\item{pred}Matrix of predicted phenotypes.
 }
 \details{
 Function finds the minimum of the elastic net objective function
