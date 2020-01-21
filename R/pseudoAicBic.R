@@ -62,7 +62,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   matListInd = 1
   
   for(i in 1:nrow(ldDat)){
-    curChr = substring(ldDat[i,1],4)
+    curChr = ldDat[i,1]
     curMin = ldDat[i,2]
     curMax = ldDat[i,3]
     curSnps = bim$V2[bim$V4 > curMin & bim$V4 <= curMax & bim$V1 == curChr]
