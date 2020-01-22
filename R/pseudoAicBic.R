@@ -74,9 +74,6 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   }
   covMat = bdiag(matList)
   
-  xtxWeightDiag = covMat
-  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] =  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] + sseReg
-
   sds=normalize(genoMat)
   sds = sds[,1]
   rm(genoMat)
@@ -107,10 +104,17 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   #calculate sigma^2
   xtyTemp = xtyEst[sigSqInd]
   xtxTemp = covMat[sigSqInd,sigSqInd]
-  xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))] = xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))]+ sigSqReg
+  diag(xtxTemp) = diag(xtxTemp) + sigSqReg
+  #xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))] = xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))]+ sigSqReg
   xtxInvTemp = solve(xtxTemp)
   qTemp = length(sigSqInd)
   sigSqTilde = (ytyEst - t(xtyTemp)%*%xtxInvTemp%*%xtyTemp)*median(N) / (median(N) - qTemp)
+  
+  #xtxWeightDiag = covMat
+  #xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] =  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] + sseReg
+  diag(covMat) = diag(covMat) + sseReg
+  xtxWeightDiag = covMat
+  rm(covMat)
 
   for(k in 1:ncol(penalizedBetas)){
     penalizedBetasTemp = penalizedBetas[,k]
