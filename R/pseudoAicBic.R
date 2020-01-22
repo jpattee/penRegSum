@@ -8,7 +8,7 @@
 #' @param N Sample sizes corresponding to the univariate effect size estimates. Can be a constant or a vector.
 #' @param refPanel Stem of PLINK binary file
 #' @param sigSqReg The matrix regularization parameter for the estimation of the residual variance. Default is .2.
-#' @param sseReg The matrix regularization parameter for the estimation of the SSE. Default is .1.
+#' @param sseReg The matrix regularization parameter for the estimation of the SSE. Default is .2.
 #' @param sigSqInd Index of SNPs to be used for estimation of residual variance. If null, default is to pick the n/5 SNPs with largest univariate effect sizes, where n is the sample size of the reference panel.
 #' @param allele1 Vector of effect alleles for the betas and penalizedBetas. Corresponds to the fifth column of a PLINK .bim file.
 #' @param allele2 Vector of reference alleles for the betas and penalizedBetas. Corresponds to the sixth column of a PLINK .bim file.
@@ -17,7 +17,7 @@
 #' @param ldBlocks Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.
 #' @export
 
-pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL, standardized = TRUE, extract = NULL, ldBlocks = NULL){
+pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2, sseReg = .2, sigSqInd = NULL, allele1 = NULL, allele2 = NULL, standardized = TRUE, extract = NULL, ldBlocks = NULL){
 
   if(length(N) == 1) N = rep(N, length(betas))
   penalizedBetas = as.matrix(penalizedBetas)
@@ -73,6 +73,9 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     }
   }
   covMat = bdiag(matList)
+  
+  xtxWeightDiag = covMat
+  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] =  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] + sseReg
 
   sds=normalize(genoMat)
   sds = sds[,1]
@@ -119,11 +122,9 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     qElast = sum(penalizedBetasTemp!=0)
     qVec = c(qVec,qElast)
   
-    xtxWeightDiag = covMat
-    xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] =  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] + sseReg
-    bxxbTemp = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
+    #bxxbTemp = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
     bxxbWeight = t(penalizedBetasTemp)%*%xtxWeightDiag%*%penalizedBetasTemp
-    bxxb = c(bxxb, bxxbTemp[1,1])
+    bxxb = c(bxxb, bxxbWeight[1,1])
   
     bxyTemp = t(penalizedBetasTemp)%*%xtyEst
     bxy = c(bxy,bxyTemp[1,1])
