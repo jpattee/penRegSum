@@ -68,7 +68,9 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     curSnps = bim$V2[bim$V4 > curMin & bim$V4 <= curMax & bim$V1 == curChr]
     tempInd = which(bim$V2%in%curSnps)
     if(length(tempInd) > 0){
-      matList[[matListInd]] = cov(genoMat[,tempInd, drop = FALSE])
+      tempMat = cov(genoMat[,tempInd, drop = FALSE])
+      diag(tempMat) = diag(tempMat) + sseReg
+      matList[[matListInd]] = tempMat
       matListInd = matListInd+1
     }
   }
@@ -103,8 +105,8 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
   #calculate sigma^2
   xtyTemp = xtyEst[sigSqInd]
-  xtxTemp = covMat[sigSqInd,sigSqInd]
-  diag(xtxTemp) = diag(xtxTemp) + sigSqReg
+  xtxTemp = as.matrix(covMat[sigSqInd,sigSqInd])
+  diag(xtxTemp) = diag(xtxTemp) - sseReg + sigSqReg
   #xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))] = xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))]+ sigSqReg
   xtxInvTemp = solve(xtxTemp)
   qTemp = length(sigSqInd)
@@ -112,7 +114,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
   #xtxWeightDiag = covMat
   #xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] =  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] + sseReg
-  diag(covMat) = diag(covMat) + sseReg
+  #diag(covMat) = diag(covMat) + sseReg
   #xtxWeightDiag = covMat
   #rm(covMat)
 
