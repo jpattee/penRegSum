@@ -39,8 +39,8 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
   if(is.null(extract)) extract=c(1:P)
   
-  if(sum(extract!=FALSE)!=P) P=P-sum(extract==FALSE)
-  if(length(extract)<P) P = length(extract)
+  #if(sum(extract!=FALSE)!=P) P=P-sum(extract==FALSE)
+  #if(length(extract)<P) P = length(extract)
   
   genoMat=genoMat[,extract]
   bim = bim[extract,]
