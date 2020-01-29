@@ -39,8 +39,8 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
   if(is.null(extract)) extract=c(1:P)
   
-  #if(sum(extract!=FALSE)!=P) P=P-sum(extract==FALSE)
-  #if(length(extract)<P) P = length(extract)
+  if(sum(extract!=FALSE)!=P) P=P-sum(extract==FALSE)
+  if(length(extract)<P) P = length(extract)
   
   genoMat=genoMat[,extract]
   bim = bim[extract,]
@@ -60,6 +60,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
   matList = vector("list")
   matListInd = 1
+  indexList = vector("list")
   
   for(i in 1:nrow(ldDat)){
     curChr = ldDat[i,1]
@@ -71,6 +72,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
       tempMat = cov(genoMat[,tempInd, drop = FALSE])
       diag(tempMat) = diag(tempMat) + sseReg
       matList[[matListInd]] = tempMat
+      indexList[[matListInd]] = tempInd
       matListInd = matListInd+1
     }
   }
@@ -105,7 +107,19 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
   #calculate sigma^2
   xtyTemp = xtyEst[sigSqInd]
-  xtxTemp = as.matrix(covMat[sigSqInd,sigSqInd])
+  
+  xtxMatList = vector("list")
+  matListInd = 1
+  for(g in 1:length(matList)){
+    tempInd = indexList[[g]]
+    matchInd = which(tempInd%in%sigSqInd)
+    if(length(matchInd) > 0){
+      tempMat = matList[[g]]
+      xtxMatList[[matListInd]] = tempMat[matchInd,matchInd]
+    }
+  }
+  xtxTemp = bdiag(xtxMatList)
+  #xtxTemp = as.matrix(covMat[sigSqInd,sigSqInd])
   diag(xtxTemp) = diag(xtxTemp) - sseReg + sigSqReg
   #xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))] = xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))]+ sigSqReg
   xtxInvTemp = solve(xtxTemp)
@@ -129,7 +143,13 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     qVec = c(qVec,qElast)
   
     #bxxbTemp = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
-    bxxbWeight = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
+    bxxbSum = 0
+    for(g in 1:length(matList)){
+      tempInd = indexList[[g]]
+      bxxbSum = bxxbSum + t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetas[tempInd]
+    }
+    #bxxbWeight = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
+    bxxbWeight = bxxbSum
     bxxb = c(bxxb, bxxbWeight[1,1])
   
     bxyTemp = t(penalizedBetasTemp)%*%xtyEst
