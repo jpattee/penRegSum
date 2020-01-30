@@ -76,7 +76,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
       matListInd = matListInd+1
     }
   }
-  covMat = bdiag(matList)
+  #covMat = bdiag(matList)
   
   sds=normalize(genoMat)
   sds = sds[,1]
