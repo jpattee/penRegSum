@@ -115,12 +115,13 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     matchInd = which(tempInd%in%sigSqInd)
     if(length(matchInd) > 0){
       tempMat = matList[[g]]
+      diag(tempMat) = diag(tempMat) - sseReg + sigSqReg
       xtxMatList[[matListInd]] = tempMat[matchInd,matchInd]
     }
   }
   xtxTemp = bdiag(xtxMatList)
   #xtxTemp = as.matrix(covMat[sigSqInd,sigSqInd])
-  diag(xtxTemp) = diag(xtxTemp) - sseReg + sigSqReg
+  #diag(xtxTemp) = diag(xtxTemp) - sseReg + sigSqReg
   #xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))] = xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))]+ sigSqReg
   xtxInvTemp = solve(xtxTemp)
   qTemp = length(sigSqInd)
