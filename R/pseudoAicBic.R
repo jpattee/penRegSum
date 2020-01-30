@@ -117,6 +117,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
       tempMat = matList[[g]]
       diag(tempMat) = diag(tempMat) - sseReg + sigSqReg
       xtxMatList[[matListInd]] = tempMat[matchInd,matchInd]
+      matListInd = matListInd + 1
     }
   }
   xtxTemp = bdiag(xtxMatList)
