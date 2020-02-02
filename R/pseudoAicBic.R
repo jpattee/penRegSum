@@ -139,7 +139,10 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     
     if(length(flippedInd) > 0) penalizedBetasTemp[flippedInd] = penalizedBetasTemp[flippedInd]*-1
 
-    if(standardized) penalizedBetasTemp = penalizedBetasTemp *sqrt(ytyEst) /sds
+    if(standardized){
+      penalizedBetasTemp = penalizedBetasTemp *sqrt(ytyEst) /sds
+      penalizedBetasTemp[sds == 0] = 0
+    }
 
     qElast = sum(penalizedBetasTemp!=0)
     qVec = c(qVec,qElast)
