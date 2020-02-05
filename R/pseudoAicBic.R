@@ -39,7 +39,6 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
   if(is.null(extract)) extract=c(1:P)
   
-  if(sum(extract!=FALSE)!=P) P=P-sum(extract==FALSE)
   if(length(extract)<P) P = length(extract)
   
   genoMat=genoMat[,extract]
@@ -139,19 +138,15 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     
     if(length(flippedInd) > 0) penalizedBetasTemp[flippedInd] = penalizedBetasTemp[flippedInd]*-1
 
-    if(standardized){
-      penalizedBetasTemp = penalizedBetasTemp *sqrt(ytyEst) /sds
-      penalizedBetasTemp[sds == 0] = 0
-    }
+    if(standardized) penalizedBetasTemp = penalizedBetasTemp *sqrt(ytyEst) /sds
 
     qElast = sum(penalizedBetasTemp!=0)
     qVec = c(qVec,qElast)
   
-    #bxxbTemp = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
     bxxbSum = 0
     for(g in 1:length(matList)){
       tempInd = indexList[[g]]
-      bxxbSum = bxxbSum + t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetas[tempInd]
+      bxxbSum = bxxbSum + t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetasTemp[tempInd]
     }
     #bxxbWeight = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
     bxxbWeight = bxxbSum
