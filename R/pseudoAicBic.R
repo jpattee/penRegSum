@@ -148,7 +148,9 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
     bxxbSum = 0
     for(g in 1:length(matList)){
+      print(g)
       tempInd = indexList[[g]]
+      print(t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetasTemp[tempInd])
       bxxbSum = bxxbSum + t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetasTemp[tempInd]
     }
     #bxxbWeight = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
