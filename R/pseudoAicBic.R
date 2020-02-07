@@ -132,8 +132,15 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   #diag(covMat) = diag(covMat) + sseReg
   #xtxWeightDiag = covMat
   #rm(covMat)
+  
+  ###TEMPORARY
+  bxxbPieces = NULL
 
   for(k in 1:ncol(penalizedBetas)){
+    
+    ###TEMPORARY
+    bxxbPiecesCol = NULL
+    
     penalizedBetasTemp = penalizedBetas[,k]
     
     if(length(flippedInd) > 0) penalizedBetasTemp[flippedInd] = penalizedBetasTemp[flippedInd]*-1
@@ -148,10 +155,10 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
   
     bxxbSum = 0
     for(g in 1:length(matList)){
-      print(g)
       tempInd = indexList[[g]]
-      print(t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetasTemp[tempInd])
-      bxxbSum = bxxbSum + t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetasTemp[tempInd]
+      bxxbInc = t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetasTemp[tempInd]
+      bxxbSum = bxxbSum + bxxbInc
+      bxxbPiecesCol = c(bxxbPiecesCol, bxxbInc)
     }
     #bxxbWeight = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
     bxxbWeight = bxxbSum
@@ -170,9 +177,12 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
 
     aicVec = c(aicVec, aicTemp[1,1])
     bicVec = c(bicVec, bicTemp[1,1])
+    
+    ###TEMPORARY
+    bxxbPieces = cbind(bxxbPieces, bxxbPiecesCol)
   }
 
-  toReturn = structure(list(aic = aicVec, bic=bicVec, SSE = SSEvec, q = qVec, bxxb = bxxb, bxy = bxy, sigSqTilde = sigSqTilde))
+  toReturn = structure(list(aic = aicVec, bic=bicVec, SSE = SSEvec, q = qVec, bxxb = bxxb, bxy = bxy, sigSqTilde = sigSqTilde, bxxbPieces = bxxbPieces))
   return(toReturn)
   #' @return a list with the following
   #' \item{aic}Estimates of AIC for the candidate polygenic risk scores.
