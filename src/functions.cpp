@@ -229,7 +229,8 @@ arma::vec normalize2(arma::mat &genotypes)
     // sd(i) = 1.0;
     arma::vec tempVec(n); tempVec.fill(m);
     tempVec = genotypes.col(i)-mm;
-    genotypes.col(i) = arma::normalise(tempVec);
+    //genotypes.col(i) = arma::normalise(tempVec);
+    genotypes.col(i) = tempVec/sd(i)
   }
   return sd;
 }
