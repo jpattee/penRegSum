@@ -4,8 +4,19 @@
 \alias{tlpSum}
 \title{Function to obtain TLP effect size estimates given summary statistics and a reference panel}
 \usage{
-tlpSum(cors, bfile, lambdas, taus, s = 0.5, thr = 1e-04, init = NULL,
-  maxIter = 1000, extract = NULL, ldBlocks = NULL)
+tlpSum(
+  cors,
+  bfile,
+  lambdas,
+  taus,
+  s = 0.5,
+  thr = 1e-04,
+  init = NULL,
+  maxIter = 1000,
+  extract = NULL,
+  ldBlocks = NULL,
+  corBim = NULL
+)
 }
 \arguments{
 \item{cors}{A vector of correlations, representing the univariate SNP-phenotype associations from the summary statistic data.}
@@ -27,15 +38,20 @@ tlpSum(cors, bfile, lambdas, taus, s = 0.5, thr = 1e-04, init = NULL,
 \item{extract}{Vector of the indices of SNPs to keep. If null, will keep all SNPs.}
 
 \item{ldBlocks}{Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.}
+
+\item{corBim}{Optional PLINK formatted '.bim' file that specifies SNP labels and locations for 'cors' vector. If non-null, will check for SNPs missing in the reference panel and handle ensuing estimation.}
 }
 \value{
 a list with the following
-\item{lambdas}Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
-\item{taus}Vector of tau values corresponding to columns of output files 'beta' and 'pred'
-\item{s}Vector of s values corresponding to columns of output files 'beta' and 'pred'
-\item{beta}Matrix of estimated coefficients.
-\item{converged}Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.
-\item{pred}Matrix of predicted phenotypes.
+\item{lambdas}
+\item{taus}
+\item{s}
+\item{beta}
+\item{converged}
+\item{pred}
+}
+\description{
+Function to obtain TLP effect size estimates given summary statistics and a reference panel
 }
 \details{
 Function finds the minimum of the TLP objective function

@@ -163,11 +163,11 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
   toReturn=structure(list(lambdas=tempLambdas,taus=tempTaus,s=tempS,beta=lassoBetasFull,converged=convergedFull,pred=yhatFull))
   return(toReturn)
   #' @return a list with the following
-  #' \item{lambdas}{Vector of lambda values corresponding to columns of output files 'beta' and 'pred'.}
-  #' \item{taus}{Vector of tau values corresponding to columns of output files 'beta' and 'pred'.}
-  #' \item{s}{Vector of s values corresponding to columns of output files 'beta' and 'pred'.}
-  #' \item{beta}{Matrix of estimated coefficients.}
-  #' \item{converged}{Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.}
-  #' \item{pred}{Matrix of predicted phenotypes.}
+  #' \item{lambdas}
+  #' \item{taus}
+  #' \item{s}
+  #' \item{beta}
+  #' \item{converged}
+  #' \item{pred}
 }
 

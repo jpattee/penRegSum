@@ -4,8 +4,18 @@
 \alias{elastSum}
 \title{Function to obtain elastic net effect size estimates given summary statistics and a reference panel}
 \usage{
-elastSum(cors, bfile, lambdas, alphas, s = 0.5, thr = 1e-04, init = NULL,
-  maxIter = 1000, extract = NULL, ldBlocks = NULL)
+elastSum(
+  cors,
+  bfile,
+  lambdas,
+  alphas,
+  s = 0.5,
+  thr = 1e-04,
+  init = NULL,
+  maxIter = 1000,
+  extract = NULL,
+  ldBlocks = NULL
+)
 }
 \arguments{
 \item{cors}{A vector of correlations, representing the univariate SNP-phenotype associations from the summary statistic data.}
@@ -36,6 +46,9 @@ a list with the following
 \item{beta}Matrix of estimated coefficients.
 \item{converged}Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is alpha value, column 3 is s value, column 4 is 1 if there was convergence.
 \item{pred}Matrix of predicted phenotypes.
+}
+\description{
+Function to obtain elastic net effect size estimates given summary statistics and a reference panel
 }
 \details{
 Function finds the minimum of the elastic net objective function

@@ -12,4 +12,4 @@ Imports:
     Rcpp,
     Matrix,
     RcppArmadillo
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 7.0.2

@@ -4,9 +4,21 @@
 \alias{pseudoAicBic}
 \title{Function to obtain pseudo-AIC and pseudo-BIC estimates given summary statistics and a reference panel}
 \usage{
-pseudoAicBic(penalizedBetas, betas, ses, N, refPanel, sigSqReg = 0.2,
-  sseReg = 0.1, sigSqInd = NULL, allele1 = NULL, allele2 = NULL,
-  standardized = TRUE, extract = NULL, ldBlocks = NULL)
+pseudoAicBic(
+  penalizedBetas,
+  betas,
+  ses,
+  N,
+  refPanel,
+  sigSqReg = 0.2,
+  sseReg = 0.2,
+  sigSqInd = NULL,
+  allele1 = NULL,
+  allele2 = NULL,
+  standardized = TRUE,
+  extract = NULL,
+  ldBlocks = NULL
+)
 }
 \arguments{
 \item{penalizedBetas}{Polygenic risk score effect size estimates. These are the estimates for which we want to approximate AIC and BIC. May be a matrix.}
@@ -21,7 +33,7 @@ pseudoAicBic(penalizedBetas, betas, ses, N, refPanel, sigSqReg = 0.2,
 
 \item{sigSqReg}{The matrix regularization parameter for the estimation of the residual variance. Default is .2.}
 
-\item{sseReg}{The matrix regularization parameter for the estimation of the SSE. Default is .1.}
+\item{sseReg}{The matrix regularization parameter for the estimation of the SSE. Default is .2.}
 
 \item{sigSqInd}{Index of SNPs to be used for estimation of residual variance. If null, default is to pick the n/5 SNPs with largest univariate effect sizes, where n is the sample size of the reference panel.}
 
@@ -44,6 +56,9 @@ a list with the following
 \item{bxxb}Estimates of the variance of the predicted phenotype resulting from the polygenic risk score applied to the reference panel: b'x'xb.
 \item{bxy}Estimates of the dot product of the polygenic risk score and the univariate effect size estimates: b'x'y.
 \item{sigSqTilde} Estimate of the residual variance.
+}
+\description{
+Function to obtain pseudo-AIC and pseudo-BIC estimates given summary statistics and a reference panel
 }
 \details{
 Function requires univariate effect size estimates, standard errors, and sample sizes, candidate polygenic risk score estimates, and a reference panel.

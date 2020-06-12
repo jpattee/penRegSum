@@ -4,9 +4,19 @@
 \alias{quasicors}
 \title{Function to obtain quasi-correlation estimates given}
 \usage{
-quasicors(testBetas, testSes, N, penalizedBetas, refPanel, allele1 = NULL,
-  allele2 = NULL, standardized = TRUE, trainVar = NULL,
-  allele1.test = NULL, allele2.test = NULL)
+quasicors(
+  testBetas,
+  testSes,
+  N,
+  penalizedBetas,
+  refPanel,
+  allele1 = NULL,
+  allele2 = NULL,
+  standardized = TRUE,
+  trainVar = NULL,
+  allele1.test = NULL,
+  allele2.test = NULL
+)
 }
 \arguments{
 \item{testBetas}{Univariate effect sizes for the out-of-sample data}
@@ -38,6 +48,9 @@ a list with the following
 \item{quasicorrelations}Quasi-correlation values for each of the input polygenic risk scores.
 \item{bxy}The estimate of the dot product of the univariate out-of-sample effect size estimates and the candidate polygenic risk score: b'x'y.
 \item{bxxb}The estimate of the variance of the predicted phenotype for the out of sample data: b'x'xb.
+}
+\description{
+Function to obtain quasi-correlation estimates given
 }
 \details{
 Function requires univariate effect size estimates, standard errors, and sample sizes, candidate polygenic risk score estimates, and a reference panel.
