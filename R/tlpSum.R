@@ -12,9 +12,10 @@
 #' @param maxIter Maximum number of iterations.
 #' @param extract Vector of the indices of SNPs to keep. If null, will keep all SNPs.
 #' @param ldBlocks Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.
+#' @param corBim Optional PLINK formatted '.bim' file that specifies SNP labels and locations for 'cors' vector. If non-null, will check for SNPs missing in the reference panel and handle ensuing estimation.
 #' @export
 
-tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIter=1000, extract=NULL, ldBlocks = NULL){
+tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIter=1000, extract=NULL, ldBlocks = NULL, corBim = NULL){
 
   fam=read.table(paste0(bfile,".fam"))
   N=nrow(fam)
@@ -40,6 +41,28 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
   
   genoMat=genoMat[,extract]
   bim = bim[extract,]
+  
+  if(!is.null(corBim)){
+    copyBim = corBim
+    missingInd = NULL
+    counter = 0
+    for(chr in levels(as.factor(bim$V1))){
+      subBim = subset(corBim, V1 == chr)
+      subTune = subset(bim, V1 == chr)
+      tempInd = which(!subBim$V4%in%bim$V4)
+      tempInd = tempInd + counter
+      missingInd = c(missingInd,tempInd)
+      counter = counter + nrow(subBim)
+    }
+    nonMissing = setdiff(1:nrow(corBim), missingInd)
+    copyBim[nonMissing,] = bim
+    bim = copyBim
+    
+    tempMat = matrix(rep(0, N*nrow(bim)), ncol = nrow(bim))
+    tempMat[,nonMissing] = genoMat
+    rm(genoMat)
+    genoMat = tempMat
+  }
   
   sMult=rep(0, length(s))
   for(i in 1:length(s)){
@@ -74,13 +97,13 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
     curInd = which(bim$V2%in%curSnps)
     permList = c(permList,curInd)
     if(length(curInd) > 0){
-      corTemp = cors[curInd]
       lassoBetasBlock = NULL
       yhatBlock = NULL
       converged = NULL
       zeroSD = rep(0, length(curInd))
       zeroSD[sds[curInd] == 0] = 1
       for(k in 1:length(s)){
+        corTemp = cors[curInd]
         genoMatTemp=genoMat[,curInd, drop=FALSE]*sqrt(1 - s[k])
         diagVec=rep(1-s[k],length(curInd))
         diagVec[zeroSD]=0
@@ -102,10 +125,9 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
               xj=lassoBetas[j]
               lassoBetas[j]=0
               tempEst=diagVec[j]*xj + corTemp[j] - mean(genoMatTemp[,j]*yhat)
-              if(zeroSD[j]==1) tempEst=0
               if(abs(tempEst)>lambdaTmp){
                 tempSign=sign(tempEst)
-                tempVal=abs(tempEst)-lambdaTmp
+                tempVal=(abs(tempEst)-lambdaTmp) / denom[j]
                 temp2=tempVal*tempSign
                 lassoBetas[j]=temp2
               }
@@ -116,6 +138,7 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
             }
             maxDiff=max(abs(lassoBetasOld-lassoBetas))
           }
+          lassoBetas[zeroSD] = lassoBetas[zeroSD]*s[k]
           converged=rbind(converged,c(lambda,tau,s[k],iterator!=maxIter))
           lassoBetasBlock=cbind(lassoBetasBlock,lassoBetas)
           yhatBlock=cbind(yhatBlock,yhat)
@@ -140,11 +163,11 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
   toReturn=structure(list(lambdas=tempLambdas,taus=tempTaus,s=tempS,beta=lassoBetasFull,converged=convergedFull,pred=yhatFull))
   return(toReturn)
   #' @return a list with the following
-  #' \item{lambdas}Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{taus}Vector of tau values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{s}Vector of s values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{beta}Matrix of estimated coefficients.
-  #' \item{converged}Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.
-  #' \item{pred}Matrix of predicted phenotypes.
+  #' \item{lambdas: Vector of lambda values corresponding to columns of output files 'beta' and 'pred'.}
+  #' \item{taus: Vector of tau values corresponding to columns of output files 'beta' and 'pred'.}
+  #' \item{s: Vector of s values corresponding to columns of output files 'beta' and 'pred'.}
+  #' \item{beta Matrix of estimated coefficients.}
+  #' \item{converged Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is tau value, column 3 is s value, column 4 is 1 if there was convergence.}
+  #' \item{pred Matrix of predicted phenotypes.}
 }
 

@@ -75,8 +75,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
       matListInd = matListInd+1
     }
   }
-  #covMat = bdiag(matList)
-  
+
   sds=normalize(genoMat)
   sds = sds[,1]
   rm(genoMat)
@@ -120,26 +119,11 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     }
   }
   xtxTemp = bdiag(xtxMatList)
-  #xtxTemp = as.matrix(covMat[sigSqInd,sigSqInd])
-  #diag(xtxTemp) = diag(xtxTemp) - sseReg + sigSqReg
-  #xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))] = xtxTemp[c(1:nrow(xtxTemp)),c(1:ncol(xtxTemp))]+ sigSqReg
   xtxInvTemp = solve(xtxTemp)
   qTemp = length(sigSqInd)
   sigSqTilde = (ytyEst - t(xtyTemp)%*%xtxInvTemp%*%xtyTemp)*median(N) / (median(N) - qTemp)
-  
-  #xtxWeightDiag = covMat
-  #xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] =  xtxWeightDiag[c(1:nrow(xtxWeightDiag)), c(1:ncol(xtxWeightDiag))] + sseReg
-  #diag(covMat) = diag(covMat) + sseReg
-  #xtxWeightDiag = covMat
-  #rm(covMat)
-  
-  ###TEMPORARY
-  bxxbPieces = NULL
 
   for(k in 1:ncol(penalizedBetas)){
-    
-    ###TEMPORARY
-    bxxbPiecesCol = NULL
     
     penalizedBetasTemp = penalizedBetas[,k]
     
@@ -158,9 +142,8 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
       tempInd = indexList[[g]]
       bxxbInc = t(penalizedBetasTemp[tempInd])%*%matList[[g]]%*%penalizedBetasTemp[tempInd]
       bxxbSum = bxxbSum + bxxbInc
-      bxxbPiecesCol = c(bxxbPiecesCol, bxxbInc)
     }
-    #bxxbWeight = t(penalizedBetasTemp)%*%covMat%*%penalizedBetasTemp
+
     bxxbWeight = bxxbSum
     bxxb = c(bxxb, bxxbWeight[1,1])
   
@@ -177,12 +160,9 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
 
     aicVec = c(aicVec, aicTemp[1,1])
     bicVec = c(bicVec, bicTemp[1,1])
-    
-    ###TEMPORARY
-    bxxbPieces = cbind(bxxbPieces, bxxbPiecesCol)
   }
 
-  toReturn = structure(list(aic = aicVec, bic=bicVec, SSE = SSEvec, q = qVec, bxxb = bxxb, bxy = bxy, sigSqTilde = sigSqTilde, bxxbPieces = bxxbPieces))
+  toReturn = structure(list(aic = aicVec, bic=bicVec, SSE = SSEvec, q = qVec, bxxb = bxxb, bxy = bxy, sigSqTilde = sigSqTilde))
   return(toReturn)
   #' @return a list with the following
   #' \item{aic}Estimates of AIC for the candidate polygenic risk scores.
