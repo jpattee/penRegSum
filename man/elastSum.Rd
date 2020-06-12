@@ -14,7 +14,8 @@ elastSum(
   init = NULL,
   maxIter = 1000,
   extract = NULL,
-  ldBlocks = NULL
+  ldBlocks = NULL,
+  corBim = NULL
 )
 }
 \arguments{
@@ -37,15 +38,8 @@ elastSum(
 \item{extract}{Vector of the indices of SNPs to keep. If null, will keep all SNPs.}
 
 \item{ldBlocks}{Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.}
-}
-\value{
-a list with the following
-\item{lambdas}Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
-\item{alphas}Vector of alpha values corresponding to columns of output files 'beta' and 'pred'
-\item{s}Vector of s values corresponding to columns of output files 'beta' and 'pred'
-\item{beta}Matrix of estimated coefficients.
-\item{converged}Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is alpha value, column 3 is s value, column 4 is 1 if there was convergence.
-\item{pred}Matrix of predicted phenotypes.
+
+\item{corBim}{Optional PLINK formatted '.bim' file that specifies SNP labels and locations for 'cors' vector. If non-null, will check for SNPs missing in the reference panel and handle ensuing estimation.}
 }
 \description{
 Function to obtain elastic net effect size estimates given summary statistics and a reference panel

@@ -54,20 +54,16 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
       missingInd = c(missingInd,tempInd)
       counter = counter + nrow(subBim)
     }
-    nonMissing = setdiff(1:nrow(corBim), missingInd)
-    copyBim[nonMissing,] = bim
-    bim = copyBim
+    if(length(missingInd) > 0){
+      nonMissing = setdiff(1:nrow(corBim), missingInd)
+      copyBim[nonMissing,] = bim
+      bim = copyBim
     
-    tempMat = matrix(rep(0, N*nrow(bim)), ncol = nrow(bim))
-    tempMat[,nonMissing] = genoMat
-    rm(genoMat)
-    genoMat = tempMat
-  }
-  
-  sMult=rep(0, length(s))
-  for(i in 1:length(s)){
-    if(i==1) sMult[i] = 1-s[i]
-    else sMult[i] = (1-s[i])/(1-s[i-1])
+      tempMat = matrix(rep(0, N*nrow(bim)), ncol = nrow(bim))
+      tempMat[,nonMissing] = genoMat
+      rm(genoMat)
+      genoMat = tempMat
+    }
   }
   
   temp = rep(lambdas, each = length(taus))
@@ -115,7 +111,7 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
           tau=taus[i]
           lassoBetas=init[curInd]
           yhat=genoMatTemp%*%lassoBetas
-          while(maxDiff>1e-4 & iterator<maxIter){
+          while(maxDiff>thr & iterator<maxIter){
             iterator=iterator+1
             lassoBetasOld=lassoBetas
             lambdaWts=abs(lassoBetas)<=tau

@@ -47,16 +47,6 @@ pseudoAicBic(
 
 \item{ldBlocks}{Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.}
 }
-\value{
-a list with the following
-\item{aic}Estimates of AIC for the candidate polygenic risk scores.
-\item{bic}Estimates of BIC for the candidate polygenic risk scores.
-\item{SSE}Estimates of SSE for the candidate polygenic risk scores.
-\item{q}Number of active parameters for the candidate polygenic risk scores.
-\item{bxxb}Estimates of the variance of the predicted phenotype resulting from the polygenic risk score applied to the reference panel: b'x'xb.
-\item{bxy}Estimates of the dot product of the polygenic risk score and the univariate effect size estimates: b'x'y.
-\item{sigSqTilde} Estimate of the residual variance.
-}
 \description{
 Function to obtain pseudo-AIC and pseudo-BIC estimates given summary statistics and a reference panel
 }

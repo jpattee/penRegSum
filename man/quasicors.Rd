@@ -43,12 +43,6 @@ quasicors(
 
 \item{ldBlocks}{Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.}
 }
-\value{
-a list with the following
-\item{quasicorrelations}Quasi-correlation values for each of the input polygenic risk scores.
-\item{bxy}The estimate of the dot product of the univariate out-of-sample effect size estimates and the candidate polygenic risk score: b'x'y.
-\item{bxxb}The estimate of the variance of the predicted phenotype for the out of sample data: b'x'xb.
-}
 \description{
 Function to obtain quasi-correlation estimates given
 }

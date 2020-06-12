@@ -12,9 +12,10 @@
 #' @param maxIter Maximum number of iterations.
 #' @param extract Vector of the indices of SNPs to keep. If null, will keep all SNPs.
 #' @param ldBlocks Location of file specifying independent LD Blocks to be used. File should be in the BED file format. If null, estimation is done by chromosome.
+#' @param corBim Optional PLINK formatted '.bim' file that specifies SNP labels and locations for 'cors' vector. If non-null, will check for SNPs missing in the reference panel and handle ensuing estimation.
 #' @export
 
-elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, maxIter=1000, extract=NULL, ldBlocks = NULL){
+elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, maxIter=1000, extract=NULL, ldBlocks = NULL, corBim = NULL){
   
   fam=read.table(paste0(bfile,".fam"))
   N=nrow(fam)
@@ -41,12 +42,29 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
   genoMat=genoMat[,extract]
   bim = bim[extract,]
   
-  sMult=rep(0, length(s))
-  for(i in 1:length(s)){
-    if(i==1) sMult[i] = 1-s[i]
-    else sMult[i] = (1-s[i])/(1-s[i-1])
+  if(!is.null(corBim)){
+    copyBim = corBim
+    missingInd = NULL
+    counter = 0
+    for(chr in levels(as.factor(bim$V1))){
+      subBim = subset(corBim, V1 == chr)
+      subTune = subset(bim, V1 == chr)
+      tempInd = which(!subBim$V4%in%bim$V4)
+      tempInd = tempInd + counter
+      missingInd = c(missingInd,tempInd)
+      counter = counter + nrow(subBim)
+    }
+    if(length(missingInd) > 0){
+      nonMissing = setdiff(1:nrow(corBim), missingInd)
+      copyBim[nonMissing,] = bim
+      bim = copyBim
+      
+      tempMat = matrix(rep(0, N*nrow(bim)), ncol = nrow(bim))
+      tempMat[,nonMissing] = genoMat
+      rm(genoMat)
+      genoMat = tempMat
+    }
   }
-  
   
   temp = rep(lambdas, each = length(alphas))
   alphas = rep(alphas, length(lambdas))
@@ -100,7 +118,6 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
               xj=lassoBetas[j]
               lassoBetas[j]=0
               tempEst=diagVec[j]*xj + corTemp[j] - mean(genoMatTemp[,j]*yhat)
-              if(zeroSD[j]==1) tempEst=0
               if(abs(tempEst)>(lambda*alpha)){
                 if(tempEst>0){newEst=(tempEst-(lambda*alpha))/denom[j]}
                 if(tempEst<0){newEst=(tempEst+(lambda*alpha))/denom[j]}
@@ -115,6 +132,8 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
             }
             maxDiff=max(abs(lassoBetasOld-lassoBetas))
           }
+          lassoBetas[zeroSD] = lassoBetas[zeroSD]*s[k]
+          
           converged=rbind(converged,c(lambda,alpha,s[l],iterator!=maxIter))
           lassoBetasBlock=cbind(lassoBetasBlock,lassoBetas)
           yhatBlock=cbind(yhatBlock,yhat)
@@ -138,11 +157,4 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
   
   toReturn=structure(list(lambdas=tempLambdas, alphas=tempAlphas, s = tempS, beta=lassoBetasFull, converged=convergedFull, pred=yhatFull))
   return(toReturn)
-  #' @return a list with the following
-  #' \item{lambdas}Vector of lambda values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{alphas}Vector of alpha values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{s}Vector of s values corresponding to columns of output files 'beta' and 'pred'
-  #' \item{beta}Matrix of estimated coefficients.
-  #' \item{converged}Matrix of convergence indicators with following format: column 1 is lambda value, column 2 is alpha value, column 3 is s value, column 4 is 1 if there was convergence.
-  #' \item{pred}Matrix of predicted phenotypes.
 }
