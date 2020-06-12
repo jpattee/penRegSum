@@ -162,12 +162,5 @@ tlpSum <- function(cors, bfile, lambdas, taus, s=0.5, thr=1e-4, init=NULL, maxIt
   
   toReturn=structure(list(lambdas=tempLambdas,taus=tempTaus,s=tempS,beta=lassoBetasFull,converged=convergedFull,pred=yhatFull))
   return(toReturn)
-  #' @return a list with the following
-  #' \item{lambdas}
-  #' \item{taus}
-  #' \item{s}
-  #' \item{beta}
-  #' \item{converged}
-  #' \item{pred}
 }
 

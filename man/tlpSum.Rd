@@ -41,15 +41,6 @@ tlpSum(
 
 \item{corBim}{Optional PLINK formatted '.bim' file that specifies SNP labels and locations for 'cors' vector. If non-null, will check for SNPs missing in the reference panel and handle ensuing estimation.}
 }
-\value{
-a list with the following
-\item{lambdas}
-\item{taus}
-\item{s}
-\item{beta}
-\item{converged}
-\item{pred}
-}
 \description{
 Function to obtain TLP effect size estimates given summary statistics and a reference panel
 }
