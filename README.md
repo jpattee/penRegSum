@@ -20,6 +20,9 @@ bxxb: vector of estimated &beta;'X'X&beta; values for the candidate models.
 bxy: vector of estimated &beta;'X'Y values for the candidate models.  
 sigSqTilde: estimated residual variance.  
 
-The quasicors function requires the following inputs: effect size estimates and SEs from the 'testing' data, sample size of the testing data, a polygenic risk score model, and a reference panel (specified again as the stem of a PLINK binary file). Optional parameters include allele vectors specifying the reference and alternative alleles for the polygenic risk score, a standardization indicator, the variance of the phenotype for the training data (required if standardized == TRUE), and allele vectors specifying reference and alternative alleles for the testing data.
+The quasicors function requires the following inputs: effect size estimates and SEs from the 'testing' data, sample size of the testing data, a polygenic risk score model, and a reference panel (specified again as the stem of a PLINK binary file). Optional parameters include allele vectors specifying the reference and alternative alleles for the polygenic risk score, a standardization indicator, the variance of the phenotype for the training data (required if standardized == TRUE), and allele vectors specifying reference and alternative alleles for the testing data. Output is a list with the following items:  
+quasicorrelations: estimated quasicorrelations for the candidate models and the test data.  
+bxy: estimated numerator of the quasicorrelations.  
+bxxb: estimated denominator squared of the quasicorrelations.  
 
 Note that much of the C++ code in this package is repurposed from the LassoSum R package. Generous credit to the authors of the LassoSum package is reiterated here. 
