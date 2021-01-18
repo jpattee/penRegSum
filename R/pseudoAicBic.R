@@ -76,7 +76,7 @@ pseudoAicBic <- function(penalizedBetas, betas, ses, N, refPanel, sigSqReg = .2,
     }
   }
 
-  sds=normalize(genoMat)
+  sds=normalize2(genoMat)
   sds = sds[,1]
   rm(genoMat)
 

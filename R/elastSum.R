@@ -132,7 +132,7 @@ elastSum <- function(cors, bfile, lambdas, alphas, s=0.5, thr=1e-4, init=NULL, m
             }
             maxDiff=max(abs(lassoBetasOld-lassoBetas))
           }
-          lassoBetas[zeroSD] = lassoBetas[zeroSD]*s[k]
+          lassoBetas[zeroSD] = lassoBetas[zeroSD]*s[l]
           
           converged=rbind(converged,c(lambda,alpha,s[l],iterator!=maxIter))
           lassoBetasBlock=cbind(lassoBetasBlock,lassoBetas)
